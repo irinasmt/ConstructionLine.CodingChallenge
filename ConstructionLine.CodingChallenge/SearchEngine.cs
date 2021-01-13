@@ -48,8 +48,20 @@ namespace ConstructionLine.CodingChallenge
             var searchResult = new SearchResults()
             {
                 Shirts= new List<Shirt>(),
-                ColorCounts = new List<ColorCount>(),
+                ColorCounts = new List<ColorCount>() 
+                { 
+                    new ColorCount{ Color = Color.Red, Count=0},
+                    new ColorCount{ Color = Color.Black, Count=0},
+                    new ColorCount{ Color = Color.Blue, Count=0},
+                    new ColorCount{ Color = Color.White, Count=0},
+                    new ColorCount{ Color = Color.Yellow, Count=0},
+                },
                 SizeCounts = new List<SizeCount>()
+                {
+                    new SizeCount{Size = Size.Large, Count =0},
+                    new SizeCount{Size = Size.Medium, Count =0},
+                    new SizeCount{Size = Size.Small, Count =0}
+                }
             };
 
             string dictKey = "";
@@ -75,55 +87,12 @@ namespace ConstructionLine.CodingChallenge
 
                     searchResult.Shirts.AddRange(_shirtsDictionary[dictKey].Shirts);
 
-                    var foundColor = searchResult.ColorCounts.FirstOrDefault(c => c.Color.Name == color.Name);
-
-                    if ( foundColor!= null)
-                    {
-                        foundColor.Count += _shirtsDictionary[dictKey].Count;
-                    }
-                    else
-                    {
-                        searchResult.ColorCounts.Add(new ColorCount
-                        {
-                            Count = _shirtsDictionary[dictKey].Count,
-                            Color = color
-                        });
-                    }
-
-                    var foundSize = searchResult.SizeCounts.FirstOrDefault(c => c.Size.Name == size.Name);
-
-                    if (foundSize != null)
-                    {
-                        foundSize.Count += _shirtsDictionary[dictKey].Count;
-                    }
-                    else
-                    {
-                        searchResult.SizeCounts.Add(new SizeCount
-                        {
-                            Count = _shirtsDictionary[dictKey].Count,
-                            Size = size
-                        });
-                    }
+                    searchResult.ColorCounts.FirstOrDefault(c => c.Color.Name == color.Name).Count += _shirtsDictionary[dictKey].Count;
+                    searchResult.SizeCounts.FirstOrDefault(c => c.Size.Name == size.Name).Count += _shirtsDictionary[dictKey].Count;
+                   
                 }
                 
             }
-
-
-            Color.All.ForEach(c =>
-            {
-                if (searchResult.ColorCounts.FirstOrDefault(color => color.Color.Name == c.Name) == null)
-                {
-                    searchResult.ColorCounts.Add(new ColorCount { Color = c, Count = 0 });
-                }
-            });
-
-            Size.All.ForEach(s =>
-            {
-                if (searchResult.SizeCounts.FirstOrDefault(size => size.Size.Name == s.Name) == null)
-                {
-                    searchResult.SizeCounts.Add(new SizeCount { Size = s, Count = 0 });
-                }
-            });
 
             return searchResult;
 
